@@ -44,4 +44,27 @@ Os atuadores do iiwa no Menagerie são servos de posição: `data.ctrl[i]` é o 
 
 ## Uso de IA
 
-*(preencher: ferramentas usadas e para quê, um exemplo em que ajudou, um exemplo em que errou e como você percebeu)*
+**Ferramentas:** usei o Claude (Anthropic) durante todo o trabalho: para escolher o
+robô e o cenário, gerar a cena em MJCF e os scripts Python, calcular as poses da
+tarefa e explicar o código. Não usei servidores MCP
+para controlar o simulador; todo o controle é feito pelo script.
+
+**Onde ajudou de verdade:** nas poses do movimento coordenado. Encontrar à mão os 7
+ângulos que levam a flange até a caixa na esteira, com a garra apontando para baixo,
+seria tentativa e erro. A IA resolveu isso uma única vez com cinemática inversa
+numérica e arredondou os valores para graus inteiros, então o roteiro só usa ângulos
+de junta. Também ajudou a entender o modelo do Menagerie, principalmente que o
+`ctrl` dos atuadores não é torque, e sim o ângulo desejado de um controlador PD
+(Kp = 2000, Kd = 200).
+
+**Onde errou ou atrapalhou:**
+- Na primeira versão do movimento coordenado, o braço ia direto do repouso até a
+  esteira e passava raspando na lateral dela. Isso apareceu numa checagem de
+  distância entre o braço e os objetos da cena e foi corrigido com uma pose
+  intermediária com a garra levantada (`TRANSPORTE`). A lição foi não confiar que
+  uma trajetória gerada está livre de colisão sem verificar.
+- A IA não conseguiu instalar o MuJoCo no ambiente dela e entregou o código sem
+  ter rodado no simulador real (as prévias em GIF que ela mostrou eram desenhos
+  esquemáticos, não renders do MuJoCo). Só considerei o código válido depois de
+  rodar na minha máquina e ver o roteiro completo chegar ao fim sem o robô travar
+  em nenhum objeto.
