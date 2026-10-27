@@ -1,0 +1,69 @@
+<!--
+  Célula de fim de linha: KUKA LBR iiwa 14 entre uma esteira e um palete.
+  Este arquivo fica DENTRO da pasta kuka_iiwa_14 (copiada do MuJoCo Menagerie),
+  ao lado do iiwa14.xml, para que os caminhos das malhas (assets/) funcionem.
+  Unidades: metros. O robô está em (0,0,0), em cima de um pedestal de 40 cm.
+-->
+<mujoco model="celula fim de linha - iiwa14">
+  <include file="iiwa14.xml"/>
+
+  <statistic center="0.1 0 0.25" extent="1.4"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="160" elevation="-25"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="piso" builtin="checker" mark="edge" rgb1="0.55 0.55 0.55" rgb2="0.45 0.45 0.45"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="piso" texture="piso" texuniform="true" texrepeat="4 4" reflectance="0.1"/>
+    <material name="pedestal" rgba="0.25 0.25 0.28 1"/>
+    <material name="lona" rgba="0.12 0.12 0.12 1"/>
+    <material name="metal" rgba="0.65 0.67 0.7 1"/>
+    <material name="madeira" rgba="0.72 0.55 0.33 1"/>
+    <material name="papelao" rgba="0.78 0.62 0.42 1"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 2.5" dir="0 0 -1" directional="true"/>
+    <geom name="chao" type="plane" pos="0 0 -0.4" size="0 0 0.05" material="piso"/>
+
+    <!-- Pedestal onde o robô é fixado -->
+    <geom name="pedestal" type="box" pos="0 0 -0.2" size="0.18 0.18 0.2" material="pedestal"/>
+
+    <!-- Esteira transportadora (lado +y), topo da lona a 0.40 m do pedestal (0.80 m do chão) -->
+    <body name="esteira" pos="0.15 0.62 0">
+      <geom name="lona" type="box" pos="0 0 0.385" size="0.9 0.2 0.015" material="lona"/>
+      <geom name="lateral_1" type="box" pos="0 0.215 0.39" size="0.9 0.015 0.04" material="metal"/>
+      <geom name="lateral_2" type="box" pos="0 -0.215 0.39" size="0.9 0.015 0.04" material="metal"/>
+      <geom name="perna_1" type="box" pos="0.8 0.17 -0.025" size="0.03 0.03 0.375" material="metal"/>
+      <geom name="perna_2" type="box" pos="0.8 -0.17 -0.025" size="0.03 0.03 0.375" material="metal"/>
+      <geom name="perna_3" type="box" pos="-0.8 0.17 -0.025" size="0.03 0.03 0.375" material="metal"/>
+      <geom name="perna_4" type="box" pos="-0.8 -0.17 -0.025" size="0.03 0.03 0.375" material="metal"/>
+    </body>
+
+    <!-- Caixas chegando pela esteira -->
+    <geom name="caixa_esteira_1" type="box" pos="0.25 0.62 0.475" size="0.075 0.075 0.075" material="papelao"/>
+    <geom name="caixa_esteira_2" type="box" pos="-0.40 0.62 0.475" size="0.075 0.075 0.075" material="papelao"/>
+
+    <!-- Palete (lado -y), apoiado no chão -->
+    <body name="palete" pos="0.15 -0.65 -0.4">
+      <geom name="tabuas" type="box" pos="0 0 0.13" size="0.4 0.3 0.015" material="madeira"/>
+      <geom name="trave_1" type="box" pos="0 -0.25 0.0575" size="0.4 0.05 0.0575" material="madeira"/>
+      <geom name="trave_2" type="box" pos="0 0 0.0575" size="0.4 0.05 0.0575" material="madeira"/>
+      <geom name="trave_3" type="box" pos="0 0.25 0.0575" size="0.4 0.05 0.0575" material="madeira"/>
+    </body>
+
+    <!-- Caixas já empilhadas no palete: 1ª camada completa, 2ª camada com uma vaga -->
+    <geom name="palete_c1_a" type="box" pos="0.03 -0.77 -0.135" size="0.12 0.12 0.12" material="papelao"/>
+    <geom name="palete_c1_b" type="box" pos="0.27 -0.77 -0.135" size="0.12 0.12 0.12" material="papelao"/>
+    <geom name="palete_c1_c" type="box" pos="0.03 -0.53 -0.135" size="0.12 0.12 0.12" material="papelao"/>
+    <geom name="palete_c1_d" type="box" pos="0.27 -0.53 -0.135" size="0.12 0.12 0.12" material="papelao"/>
+    <geom name="palete_c2_a" type="box" pos="0.03 -0.77 0.105" size="0.12 0.12 0.12" material="papelao"/>
+    <geom name="palete_c2_b" type="box" pos="0.27 -0.77 0.105" size="0.12 0.12 0.12" material="papelao"/>
+    <geom name="palete_c2_c" type="box" pos="0.03 -0.53 0.105" size="0.12 0.12 0.12" material="papelao"/>
+  </worldbody>
+</mujoco>
